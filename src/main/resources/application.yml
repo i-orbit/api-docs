@@ -1,0 +1,21 @@
+spring:
+  application:
+      name: api-docs
+server:
+    port: 19081
+knife4j:
+    enableAggregation: true
+    cloud:
+        enable: true
+        routes:
+            - name: iam
+              uri: 127.0.0.1:19527
+              location: /v3/api-docs
+            - name: core
+              uri: 127.0.0.1:13701
+              location: /v3/api-docs
+    basic-auth:
+        enable: true
+        username: admin
+        password: "zaq1@WSX"
+
