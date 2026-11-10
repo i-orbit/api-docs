@@ -58,14 +58,27 @@ pipeline {
                     sh '''
                         #!/bin/bash
                         set -e
+
+                        echo "========== Harbor Configuration =========="
+                        echo "Harbor: $HARBOR"
+                        echo "Image: orbit/$SERVICE_NAME:$VERSION"
+
                         echo "========== Login Harbor =========="
-                        echo "$HARBOR_PASSWORD" | docker login ${params.HARBOR} -u "$HARBOR_USER" --password-stdin
+                        echo "$HARBOR_PASSWORD" | docker login "$HARBOR" \
+                            -u "$HARBOR_USER" \
+                            --password-stdin
+
                         echo "========== Tag Image =========="
-                        docker tag orbit/$SERVICE_NAME:$VERSION $HARBOR/orbit/$SERVICE_NAME:$VERSION
+                        docker tag \
+                            "orbit/$SERVICE_NAME:$VERSION" \
+                            "$HARBOR/orbit/$SERVICE_NAME:$VERSION"
+
                         echo "========== Push Image =========="
-                        docker push $HARBOR/orbit/$SERVICE_NAME:$VERSION
+                        docker push "$HARBOR/orbit/$SERVICE_NAME:$VERSION"
+
                         echo "========== Logout Harbor =========="
                         docker logout "$HARBOR"
+
                         echo "Harbor push completed!"
                     '''
                 }
