@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'apache-maven-3.10.0'
+    }
+
+    parameters {
+        string(
+            name: 'VERSION',
+            defaultValue: '1.0.0',
+            description: 'Version'
+        )
+    }
+
+    environment {
+        SERVICE_NAME    = 'api-docs'
+    }
+
+    stages {
+        stage('Build Maven Project') {
+            steps {
+                script {
+                    sh 'mvn clean package -Dmaven.test.skip=true -Porbit'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh """
+                        docker build \
+                            --platform linux/amd64 \
+                            -f docker/Dockerfile \
+                            -t orbit/${env.SERVICE_NAME}:${params.VERSION} \
+                            .
+                    """
+                }
+            }
+        }
+
+        stage('Push Harbor') {
+            steps {
+                sh '''
+                    #!/bin/bash
+                    set -e
+                    echo "========== Login Harbor =========="
+                    echo "$HARBOR_PASS" | docker login "$HARBOR" \
+                        -u "$HARBOR_USER" \
+                        --password-stdin
+                    echo "========== Tag Image =========="
+                    docker tag \
+                        orbit/$SERVICE_NAME:$VERSION \
+                        $HARBOR/orbit/$SERVICE_NAME:$VERSION
+                    echo "========== Push Image =========="
+                    docker push $HARBOR/orbit/$SERVICE_NAME:$VERSION
+                    echo "========== Logout Harbor =========="
+                    docker logout "$HARBOR"
+                    echo "Harbor push completed!"
+                '''
+            }
+        }
+
+    }
+
+}
