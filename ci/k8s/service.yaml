@@ -5,13 +5,12 @@ metadata:
     namespace: orbit
 
 spec:
-    type: ClusterIP
-
+    type: NodePort
     selector:
         app: api-docs
-
     ports:
         - name: http
           port: 8080
           targetPort: 8080
+          nodePort: 13701
           protocol: TCP

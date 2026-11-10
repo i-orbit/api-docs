@@ -14,8 +14,14 @@ knife4j:
             - name: core
               uri: 127.0.0.1:13701
               location: /v3/api-docs
-    basic-auth:
-        enable: true
-        username: admin
-        password: "zaq1@WSX"
 
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info
+    endpoint:
+        health:
+            probes:
+                enabled: true
+            show-details: never
