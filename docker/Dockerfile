@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:8u102
 
 ARG NACOS_SERVER
 ARG PROFILE
