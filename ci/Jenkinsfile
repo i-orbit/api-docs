@@ -7,12 +7,6 @@ pipeline {
 
     parameters {
         string(
-            name: 'HARBOR',
-            defaultValue: '192.168.26.180',
-            description: 'Harbor Host'
-        )
-
-        string(
             name: 'VERSION',
             defaultValue: '1.0.0',
             description: 'Version'
@@ -60,6 +54,7 @@ pipeline {
 
                         echo "========== Harbor Configuration =========="
                         echo "Harbor: $HARBOR"
+                        echo "Harbor User: $HARBOR_USER"
                         echo "Image: orbit/$SERVICE_NAME:$VERSION"
 
                         echo "========== Login Harbor =========="
