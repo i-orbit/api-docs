@@ -78,6 +78,31 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy Kubernetes') {
+            steps {
+                script {
+                    sh '''#!/bin/bash
+                        set -euo pipefail
+                        echo "========== Deploy Kubernetes =========="
+                        kubectl apply -k ci/k8s
+                        echo "========== Update Image =========="
+                        kubectl set image \
+                            deployment/$SERVICE_NAME \
+                            $SERVICE_NAME=$HARBOR/orbit/$SERVICE_NAME:$VERSION \
+                            -n orbit
+                        echo "========== Rollout Status =========="
+                        kubectl rollout status \
+                            deployment/$SERVICE_NAME \
+                            -n orbit \
+                            --timeout=300s
+                        echo "========== Deployment Result =========="
+                        kubectl get pods -n orbit -o wide
+                    '''
+                }
+            }
+        }
+
     }
 
 }
