@@ -8,11 +8,8 @@ knife4j:
   cloud:
     enable: true
     routes:
-      - name: iam
-        uri: 127.0.0.1:19527
-        location: /v3/api-docs
       - name: core
-        uri: 127.0.0.1:13701
+        uri: core:30701
         location: /v3/api-docs
 
 management:
