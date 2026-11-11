@@ -1,27 +1,27 @@
 spring:
   application:
-      name: api-docs
+    name: api-docs
 server:
-    port: 19081
+  port: 30700
 knife4j:
-    enableAggregation: true
-    cloud:
-        enable: true
-        routes:
-            - name: iam
-              uri: 127.0.0.1:19527
-              location: /v3/api-docs
-            - name: core
-              uri: 127.0.0.1:13701
-              location: /v3/api-docs
+  enableAggregation: true
+  cloud:
+    enable: true
+    routes:
+      - name: iam
+        uri: 127.0.0.1:19527
+        location: /v3/api-docs
+      - name: core
+        uri: 127.0.0.1:13701
+        location: /v3/api-docs
 
 management:
-    endpoints:
-        web:
-            exposure:
-                include: health,info
-    endpoint:
-        health:
-            probes:
-                enabled: true
-            show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never

@@ -1,46 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: api-docs
-    namespace: orbit
-    labels:
-        app: api-docs
+  name: api-docs
+  namespace: orbit
+  labels:
+    app: api-docs
 spec:
-    replicas: 1
-    selector:
-        matchLabels:
-            app: api-docs
-    template:
-        metadata:
-            labels:
-                app: api-docs
-        spec:
-            imagePullSecrets:
-                - name: harbor-secret
-            containers:
-                - name: api-docs
-                  image: 192.168.26.180/orbit/api-docs:latest
-                  imagePullPolicy: Always
-                  ports:
-                      - name: http
-                        containerPort: 8080
-                        protocol: TCP
-                  resources:
-                      requests:
-                          cpu: 200m
-                          memory: 512Mi
-                      limits:
-                          cpu: 1000m
-                          memory: 1Gi
-                  readinessProbe:
-                      httpGet:
-                          path: /actuator/health
-                          port: 8080
-                      initialDelaySeconds: 30
-                      periodSeconds: 10
-                  livenessProbe:
-                      httpGet:
-                          path: /actuator/health
-                          port: 8080
-                      initialDelaySeconds: 60
-                      periodSeconds: 20
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-docs
+  template:
+    metadata:
+      labels:
+        app: api-docs
+    spec:
+      imagePullSecrets:
+        - name: harbor-secret
+      containers:
+        - name: api-docs
+          image: 192.168.26.180/orbit/api-docs:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
