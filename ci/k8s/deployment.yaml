@@ -7,6 +7,7 @@ metadata:
     app: api-docs
 spec:
   replicas: 1
+  revisionHistoryLimit: 1
   selector:
     matchLabels:
       app: api-docs
@@ -17,7 +18,6 @@ spec:
     spec:
       imagePullSecrets:
         - name: harbor-secret
-
       containers:
         - name: api-docs
           image: 192.168.26.180/orbit/api-docs:latest
