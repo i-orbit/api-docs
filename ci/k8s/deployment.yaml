@@ -17,14 +17,17 @@ spec:
     spec:
       imagePullSecrets:
         - name: harbor-secret
+
       containers:
         - name: api-docs
           image: 192.168.26.180/orbit/api-docs:latest
           imagePullPolicy: Always
+
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 30700
               protocol: TCP
+
           resources:
             requests:
               cpu: 200m
@@ -32,15 +35,30 @@ spec:
             limits:
               cpu: 1000m
               memory: 1Gi
+
+          # 启动探针
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+
+          # 就绪探针
           readinessProbe:
             httpGet:
               path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 30
+              port: http
             periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # 存活探针
           livenessProbe:
             httpGet:
               path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 60
+              port: http
             periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
