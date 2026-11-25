@@ -91,11 +91,10 @@ pipeline {
                             deployment/$SERVICE_NAME \
                             $SERVICE_NAME=$HARBOR/orbit/$SERVICE_NAME:$VERSION \
                             -n orbit
-                        echo "========== Rollout Status =========="
-                        kubectl rollout status \
-                            deployment/$SERVICE_NAME \
-                            -n orbit \
-                            --timeout=300s
+                        echo "========== Delete Old Pods =========="
+                        kubectl delete pod \
+                           -l app=$SERVICE_NAME \
+                           -n orbit
                         echo "========== Deployment Result =========="
                         kubectl get pods -n orbit -o wide
                     '''
