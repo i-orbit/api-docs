@@ -11,6 +11,9 @@ knife4j:
       - name: core
         uri: core:30701
         location: /v3/api-docs
+      - name: iam
+        uri: iam:30702
+        location: /v3/api-docs
 
 management:
   endpoints:
